@@ -86,6 +86,66 @@ end
 
 -- 🌐 Main Tab Content
 local mainTab = tabFrames["Main"]
+local displayArea = mainTab:WaitForChild("DisplayArea")
+local infoSection = Instnce.new("Frame", displayArea)
+
+-- 🧾 Info Section Container
+local infoSection = Instance.new("Frame", DisplayArea)
+infoSection.Size = UDim2.new(1, -20, 0, 120)
+infoSection.Position = UDim2.new(0, 10, 0, 10)
+infoSection.BackgroundTransparency = 1
+
+-- Player Label
+local playerLabel = Instance.new("TextLabel", infoSection)
+playerLabel.Size = UDim2.new(1, 0, 0, 30)
+playerLabel.Position = UDim2.new(0, 0, 0, 0)
+playerLabel.Text = "👤 Player: " .. player.Name
+playerLabel.TextColor3 = Color3.new(1, 1, 1)
+playerLabel.BackgroundTransparency = 1
+playerLabel.Font = Enum.Font.GothamSemibold
+playerLabel.TextSize = 18
+playerLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Server ID Label
+local serverId = game.JobId ~= "" and game.JobId or "Local"
+local serverIdLabel = Instance.new("TextLabel", infoSection)
+serverIdLabel.Size = UDim2.new(1, -110, 0, 30)
+serverIdLabel.Position = UDim2.new(0, 0, 0, 35)
+serverIdLabel.Text = "🆔 Server ID: " .. serverId
+serverIdLabel.TextColor3 = Color3.new(1, 1, 1)
+serverIdLabel.BackgroundTransparency = 1
+serverIdLabel.Font = Enum.Font.GothamSemibold
+serverIdLabel.TextSize = 18
+serverIdLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Copy Button
+local copyButton = Instance.new("TextButton", infoSection)
+copyButton.Size = UDim2.new(0, 100, 0, 30)
+copyButton.Position = UDim2.new(1, -100, 0, 35)
+copyButton.Text = "Copy ID"
+copyButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+copyButton.TextColor3 = Color3.new(1, 1, 1)
+copyButton.Font = Enum.Font.GothamBold
+copyButton.TextSize = 16
+
+copyButton.MouseButton1Click:Connect(function()
+    setclipboard(serverId)
+    copyButton.Text = "Copied!"
+    task.delay(1.5, function()
+        copyButton.Text = "Copy ID"
+    end)
+end)
+
+-- Place Version Label
+local versionLabel = Instance.new("TextLabel", infoSection)
+versionLabel.Size = UDim2.new(1, 0, 0, 30)
+versionLabel.Position = UDim2.new(0, 0, 0, 70)
+versionLabel.Text = "📦 Place Version: " .. tostring(game.PlaceVersion)
+versionLabel.TextColor3 = Color3.new(1, 1, 1)
+versionLabel.BackgroundTransparency = 1
+versionLabel.Font = Enum.Font.GothamSemibold
+versionLabel.TextSize = 18
+versionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Toggle Buttons
 local infoToggle = Instance.new("TextButton", mainTab)

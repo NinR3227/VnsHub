@@ -3,15 +3,16 @@
 
 local function fetch(url)
     local ok, src = pcall(function() return game:HttpGet(url, true) end)
-    if not ok then warn("[Germa66] Failed to fetch: " .. tostring(src)) return nil end
+    if not ok then warn("[Germa66] Fetch failed: " .. tostring(src)) return nil end
     local chunk, err = loadstring(src)
     if not chunk then warn("[Germa66] Compile error: " .. tostring(err)) return nil end
-    local ok2, mod = pcall(chunk)
-    if not ok2 then warn("[Germa66] Runtime error: " .. tostring(mod)) return nil end
-    return mod
+    local ok2, result = pcall(chunk)
+    if not ok2 then warn("[Germa66] Runtime error: " .. tostring(result)) return nil end
+    return result
 end
 
-local BASE = "https://raw.githubusercontent.com/NinR3227/VnsHub/main/"
+-- Replace with your repo RAW base (must end with /)
+local BASE = "https://raw.githubusercontent.com/YourUser/YourRepo/main/"
 
 local Utils = fetch(BASE .. "utils.lua")
 local Gui = fetch(BASE .. "gui.lua")
@@ -22,38 +23,36 @@ if not (Utils and Gui and BuildAutomation) then
     return
 end
 
--- Init base window
 Gui.init(Utils)
 
--- Sidebar: four options, only the 2nd is active (Automation Panel)
+-- Sidebar menu: 4 options, only 2nd is active
 Gui.addMenuItem({ label = "Reserved", name = "Reserved1", disabled = true })
 Gui.addMenuItem({
     label = "Automation Panel",
     name = "Automation Panel",
     onClick = function()
-        -- build panel if not already
-        local state = Gui.getRoot()
-        if not state.panels["Automation Panel"] then
+        local root = Gui.getRoot()
+        if not root.panels["Automation Panel"] then
             BuildAutomation(Gui, Utils)
         end
+        Gui.showPanel("Automation Panel")
     end
 })
 Gui.addMenuItem({ label = "Reserved", name = "Reserved3", disabled = true })
 Gui.addMenuItem({ label = "Reserved", name = "Reserved4", disabled = true })
 
--- Create placeholder panels for reserved (optional)
-local resPanel = Gui.createPanel("Reserved")
-local resText = Utils.createText(resPanel, "Reserved for future updates", 16, Utils.Theme.Muted, false)
-resText.TextXAlignment = Enum.TextXAlignment.Center
+-- Optional: placeholder panel
+local p = Gui.createPanel("Reserved")
+local txt = Utils.createText(p, "Reserved for future updates", 16, Utils.Theme.Muted, false, Enum.TextXAlignment.Center)
+txt.TextXAlignment = Enum.TextXAlignment.Center
 
--- Default to Automation Panel selection
+-- Default selection
 task.defer(function()
     Gui.showPanel("Automation Panel")
-    -- simulate clicking its button to highlight
     local root = Gui.getRoot()
     for _, info in ipairs(root.menuButtons) do
         if info.name == "Automation Panel" then
-            info.button:Activate()
+            Utils.setActiveButton(info.button, true)
             break
         end
     end

@@ -125,52 +125,18 @@ playerCountLabel.TextSize = 18
 playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 
 -- Info Section
-local infoSection = Instance.new("Frame", displayArea)
-infoSection.Size = UDim2.new(1, -20, 1, 120)
-infoSection.Position = UDim2.new(0, 10, 0, 10)
+local infoSection = Instance.new("TextLabel", displayArea)
+infoSection.Size = UDim2.new(1, -20, 1, -20)
+infoSection.Position = UDim2.new(0, 10, 0, 40)
 infoSection.TextColor3 = Color3.new(1, 1, 1)
 infoSection.BackgroundTransparency = 1
-
--- Player Label
-local playerLabel = Instance.new("TextLabel", infosection)
-playerLabel.Size = UDim2.new(1, 0, 0, 30)
-playerLabel.Position = UDim2.new(0, 0, 0, 0)
-playerLabel.Text = "Username".. player.name
-playerLabel.TextColor = Color3.new(1, 1, 1)
-playerLabel.BackgroundTransparency = 1 
-playerLabel.Font = Enum.Font.GothamSemiBold
-playerLabel.TextSize = 18
-playerLabel.TextAlignment = Enum.TextXAlignment.Left
-
--- Server ID Label
-local serverId = game.JobId ~= "" and game.JobID or "Local"
-local serverIdLabel =Instanc.new("TextLabel", infosection)
-serverIdLabel.Size = UDim2.new(1, -110, 0, 30)
-serverIdLabel.Position = UDim2.new(0, 0, 0, 35)
-serverIdLabel.Text = "Server ID".. serveId
-serverIdLabel.TextColor = Color3.new(1, 1, 1)
-serverIdLabel.BackgroundTransparency = 1 
-serverIdLabel.Font = Enum.Font.GothamSemiBold
-serverIdLabel.TextSize = 18
-serverIdLabel.TextAlignment = Enum.TextXAlignment.Left
-
--- Copy Button
-local copyButton = Instance.new("TextButton", infoSection)
-copyButton.Size = UDim2.new(0, 100, 0, 30)
-copyButton.Position = UDim2.new(1, -100, 0, 35)
-copyButton.Text = "Copy ID"
-copyButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-copyButton.TextColor3 = Color3.new(1, 1, 1)
-copyButton.Font = Enum.Font.GothamBold
-copyButton.TextSize = 16
-
-copyButton.MouseButton1Click:Connect(function()
-    setclipboard(serverId)
-    copyButton.Text = "Copied!"
-    task.delay(1.5, function()
-        copyButton.Text = "Copy ID"
-    end)
-end)
+infoSection.TextWrapped = true
+infoSection.TextYAlignment = Enum.TextYAlignment.Top
+infoSection.Font = Enum.Font.SourceSans
+infoSection.TextSize = 16
+infoSection.Text = "Player: " .. player.Name ..
+    "\nServer ID: " .. serverId ..
+    "\nPlace Version: " .. tostring(game.PlaceVersion)
 
 -- Server Hop Section
 local serverHopSection = Instance.new("ScrollingFrame", mainTab)
@@ -185,16 +151,14 @@ serverHopSection.AutomaticCanvasSize = Enum.AutomaticSize.Y
 serverHopSection.CanvasPosition = Vector2.new(0, 0)
 serverHopSection.ClipsDescendants = true
 
--- Place Version Label
-local versionLabel = Instance.new("TextLabel", infoSection)
+local versionLabel = Instance.new("TextLabel", serverHopSection)
 versionLabel.Size = UDim2.new(1, 0, 0, 30)
-versionLabel.Position = UDim2.new(0, 0, 0, 70)
+versionLabel.Position = UDim2.new(0, 0, 0, 0)
 versionLabel.Text = "Place Version: " .. tostring(game.PlaceVersion)
 versionLabel.TextColor3 = Color3.new(1, 1, 1)
 versionLabel.BackgroundTransparency = 1
-versionLabel.Font = Enum.Font.GothamSemibold
+versionLabel.Font = Enum.Font.SourceSansBold
 versionLabel.TextSize = 18
-versionLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local jobIdBox = Instance.new("TextBox", serverHopSection)
 jobIdBox.Size = UDim2.new(1, -20, 0, 30)
@@ -316,5 +280,4 @@ petLabel.BackgroundTransparency = 1
 petLabel.Font = Enum.Font.SourceSansItalic
 petLabel.TextSize = 20
 petLabel.TextWrapped = true
-
 

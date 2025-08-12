@@ -161,34 +161,87 @@ infoSection.Text = "Player: " .. player.Name ..
     "\nPlace Version: " .. tostring(game.PlaceVersion)
 
 --== SERVER HOP CONTAINER ==
-local serverHopContainer = Instance.new("Frame", mainTab)
-serverHopContainer.Size = UDim2.new(1, -20, 1, -60)
-serverHopContainer.Position = UDim2.new(0, 10, 0, 50)
-serverHopContainer.BackgroundTransparency = 1
+serverHopContainer:ClearAllChildren()
 serverHopContainer.Visible = false
 
-local serverList = Instance.new("ScrollingFrame", serverHopContainer)
-serverList.Size = UDim2.new(1, -20, 1, -20)
-serverList.Position = UDim2.new(0, 10, 0, 10)
-serverList.CanvasSize = UDim2.new(0, 0, 0, 0)
-serverList.ScrollBarThickness = 6
-serverList.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-serverList.BorderSizePixel = 0
-serverList.AutomaticCanvasSize = Enum.AutomaticSize.Y
+-- Button layout frame
+local buttonRow = Instance.new("Frame", serverHopContainer)
+buttonRow.Size = UDim2.new(1, -20, 0, 30)
+buttonRow.Position = UDim2.new(0, 10, 0, 10)
+buttonRow.BackgroundTransparency = 1
 
-local serverLayout = Instance.new("UIListLayout", serverList)
-serverLayout.SortOrder = Enum.SortOrder.LayoutOrder
-serverLayout.Padding = UDim.new(0, 4)
+local rowLayout = Instance.new("UIListLayout", buttonRow)
+rowLayout.FillDirection = Enum.FillDirection.Horizontal
+rowLayout.Padding = UDim.new(0, 6)
 
---== Button wiring for tab switching ==
-infoToggle.MouseButton1Click:Connect(function()
-    infoContainer.Visible = true
-    serverHopContainer.Visible = false
+-- REJOIN
+local rejoinButton = Instance.new("TextButton", buttonRow)
+rejoinButton.Size = UDim2.new(0, 100, 1, 0)
+rejoinButton.Text = "Rejoin"
+rejoinButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+rejoinButton.TextColor3 = Color3.new(1, 1, 1)
+applyCorner(rejoinButton, 6)
+rejoinButton.MouseButton1Click:Connect(function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
 end)
-serverHopToggle.MouseButton1Click:Connect(function()
-    infoContainer.Visible = false
-    serverHopContainer.Visible = true
+
+-- HOP SERVER
+local hopButton = Instance.new("TextButton", buttonRow)
+hopButton.Size = UDim2.new(0, 120, 1, 0)
+hopButton.Text = "Hop Server"
+hopButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+hopButton.TextColor3 = Color3.new(1, 1, 1)
+applyCorner(hopButton, 6)
+hopButton.MouseButton1Click:Connect(function()
+    local success, pages = pcall(function()
+        return game.HttpService:JSONDecode(
+            game:HttpGet(string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100", game.PlaceId))
+        )
+    end)
+    if success and pages and pages.data then
+        for _, server in ipairs(pages.data) do
+            if tostring(server.id) ~= tostring(game.JobId) then
+                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, server.id, player)
+                break
+            end
+        end
+    else
+        warn("[VnsHub] Failed to fetch server list for hop.")
+    end
 end)
+
+-- JOB ID TELEPORT
+local jobIdBox = Instance.new("TextBox", serverHopContainer)
+jobIdBox.Size = UDim2.new(1, -20, 0, 30)
+jobIdBox.Position = UDim2.new(0, 10, 0, 50)
+jobIdBox.PlaceholderText = "Enter JobId..."
+jobIdBox.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+jobIdBox.TextColor3 = Color3.new(1, 1, 1)
+jobIdBox.ClearTextOnFocus = false
+applyCorner(jobIdBox, 6)
+
+local joinByIdButton = Instance.new("TextButton", serverHopContainer)
+joinByIdButton.Size = UDim2.new(0, 120, 0, 30)
+joinByIdButton.Position = UDim2.new(0, 10, 0, 90)
+joinByIdButton.Text = "Join by JobId"
+joinByIdButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+joinByIdButton.TextColor3 = Color3.new(1, 1, 1)
+applyCorner(joinByIdButton, 6)
+joinByIdButton.MouseButton1Click:Connect(function()
+    local jobId = jobIdBox.Text:trim()
+    if jobId ~= "" then
+        pcall(function()
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, jobId, player)
+        end)
+    else
+        warn("[VnsHub] JobId box is empty.")
+    end
+end)
+
+-- SERVER LIST SCROLL FRAME
+serverList.Parent = serverHopContainer
+serverList.Position = UDim2.new(0, 10, 0, 130)
+serverList.Size = UDim2.new(1, -20, 1, -140)
 
 --== Function to populate available servers ==
 local function populateServers()

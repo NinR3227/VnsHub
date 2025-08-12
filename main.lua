@@ -2,6 +2,14 @@
 -- VnsHub Main GUI Script  |  Cleaned & merged August 2025
 --========================================================
 
+-- utils
+local function applyCorner(guiObject, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, radius or 8)
+    c.Parent = guiObject
+    return c
+end
+
 --== Player setup ==
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -185,7 +193,12 @@ rejoinButton.Size = UDim2.new(0, 100, 1, 0)
 rejoinButton.Text = "Rejoin"
 rejoinButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 rejoinButton.TextColor3 = Color3.new(1, 1, 1)
-applyCorner(rejoinButton, 6)
+
+-- replace applyCorner(rejoinButton, 6) with:
+local rejoinCorner = Instance.new("UICorner")
+rejoinCorner.CornerRadius = UDim.new(0, 6)
+rejoinCorner.Parent = rejoinButton
+
 rejoinButton.MouseButton1Click:Connect(function()
     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
 end)

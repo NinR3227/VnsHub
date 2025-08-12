@@ -1,7 +1,6 @@
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local serverId = game.JobId ~= "" and game.JobId or "Local/Studio"
-local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/ShopList.lua"))()
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "GardenGameGUI"
@@ -30,6 +29,8 @@ closeButton.TextColor3 = Color3.new(1, 1, 1)
 closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
+
+local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/ShopList.lua"))()
 
 local restoreButton = Instance.new("TextButton", screenGui)
 restoreButton.Size = UDim2.new(0, 100, 0, 30)

@@ -2,19 +2,16 @@ local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local serverId = game.JobId ~= "" and game.JobId or "Local/Studio"
 
--- Create GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "GardenGameGUI"
 screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
--- Main Frame
 local mainFrame = Instance.new("Frame", screenGui)
 mainFrame.Size = UDim2.new(0, 500, 0, 300)
 mainFrame.Position = UDim2.new(0.5, -250, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 
--- Minimize Button
 local minimizeButton = Instance.new("TextButton", mainFrame)
 minimizeButton.Size = UDim2.new(0, 30, 0, 30)
 minimizeButton.Position = UDim2.new(1, -70, 0, 0)
@@ -22,7 +19,6 @@ minimizeButton.Text = "—"
 minimizeButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 minimizeButton.TextColor3 = Color3.new(1, 1, 1)
 
--- Close Button
 local closeButton = Instance.new("TextButton", mainFrame)
 closeButton.Size = UDim2.new(0, 30, 0, 30)
 closeButton.Position = UDim2.new(1, -35, 0, 0)
@@ -34,7 +30,6 @@ closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- Restore Button
 local restoreButton = Instance.new("TextButton", screenGui)
 restoreButton.Size = UDim2.new(0, 100, 0, 30)
 restoreButton.Position = UDim2.new(0, 10, 0, 10)
@@ -53,7 +48,6 @@ restoreButton.MouseButton1Click:Connect(function()
     restoreButton.Visible = false
 end)
 
--- Tab Buttons and Frames
 local tabs = {"Main", "Misc", "Pet"}
 local tabFrames = {}
 
@@ -84,10 +78,10 @@ for i, tabName in ipairs(tabs) do
     end)
 end
 
--- 🌐 Main Tab Content
+-- MAIN TAB SECTION
 local mainTab = tabFrames["Main"]
 
--- Toggle Buttons
+-- Toggle Buttons for INFO and SERVER HOP
 local infoToggle = Instance.new("TextButton", mainTab)
 infoToggle.Size = UDim2.new(0, 100, 0, 30)
 infoToggle.Position = UDim2.new(0, 10, 0, 10)
@@ -106,20 +100,13 @@ serverHopToggle.TextColor3 = Color3.new(1, 1, 1)
 serverHopToggle.Font = Enum.Font.GothamBold
 serverHopToggle.TextSize = 18
 
--- Info and Server Hop Containers
+-- Info Container
 local infoContainer = Instance.new("Frame", mainTab)
 infoContainer.Size = UDim2.new(1, -20, 1, -60)
 infoContainer.Position = UDim2.new(0, 10, 0, 50)
 infoContainer.BackgroundTransparency = 1
 infoContainer.Visible = true
 
-local serverHopContainer = Instance.new("Frame", mainTab)
-serverHopContainer.Size = UDim2.new(1, -20, 1, -60)
-serverHopContainer.Position = UDim2.new(0, 10, 0, 50)
-serverHopContainer.BackgroundTransparency = 1
-serverHopContainer.Visible = false
-
--- Info Section
 local displayArea = Instance.new("Frame", infoContainer)
 displayArea.Size = UDim2.new(1, -20, 1, -60)
 displayArea.Position = UDim2.new(0, 10, 0, 50)
@@ -149,7 +136,14 @@ infoSection.Text = "Player: " .. player.Name ..
     "\nServer ID: " .. serverId ..
     "\nPlace Version: " .. tostring(game.PlaceVersion)
 
--- Server Hop Section (Visible = true by default!)
+-- SERVER HOP Container
+local serverHopContainer = Instance.new("Frame", mainTab)
+serverHopContainer.Size = UDim2.new(1, -20, 1, -60)
+serverHopContainer.Position = UDim2.new(0, 10, 0, 50)
+serverHopContainer.BackgroundTransparency = 1
+serverHopContainer.Visible = false
+
+-- Server Hop Section: Scrollable UI with all controls
 local serverHopSection = Instance.new("ScrollingFrame", serverHopContainer)
 serverHopSection.Size = UDim2.new(1, -20, 1, -60)
 serverHopSection.Position = UDim2.new(0, 10, 0, 50)
@@ -207,7 +201,6 @@ hopButton.TextColor3 = Color3.new(1, 1, 1)
 hopButton.Font = Enum.Font.GothamBold
 hopButton.TextSize = 16
 
--- Toggle Logic
 infoToggle.MouseButton1Click:Connect(function()
     infoContainer.Visible = true
     serverHopContainer.Visible = false
@@ -218,7 +211,6 @@ serverHopToggle.MouseButton1Click:Connect(function()
     serverHopContainer.Visible = true
 end)
 
--- Server Actions
 joinJobButton.MouseButton1Click:Connect(function()
     local jobId = jobIdBox.Text
     if jobId and jobId ~= "" then
@@ -234,38 +226,51 @@ hopButton.MouseButton1Click:Connect(function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, player)
 end)
 
--- 🚀 Misc Tab Content with Dropdown
+-- ========== MISC TAB ==========
+
 local miscTab = tabFrames["Misc"]
 
-local miscDropdown = Instance.new("TextButton", miscTab)
-miscDropdown.Size = UDim2.new(0, 200, 0, 30)
-miscDropdown.Position = UDim2.new(0.5, -100, 0, 10)
-miscDropdown.Text = "ESP"
-miscDropdown.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-miscDropdown.TextColor3 = Color3.new(1, 1, 1)
-miscDropdown.Font = Enum.Font.SourceSansBold
-miscDropdown.TextSize = 18
+-- ESP/Automation horizontal row at top
+local espAutoRow = Instance.new("Frame", miscTab)
+espAutoRow.Size = UDim2.new(1, -20, 0, 40)
+espAutoRow.Position = UDim2.new(0, 10, 0, 10)
+espAutoRow.BackgroundTransparency = 1
 
-local dropdownOptions = {"ESP", "Automation"}
-local currentMiscSection = "ESP"
+local espDropdownBtn = Instance.new("TextButton", espAutoRow)
+espDropdownBtn.Size = UDim2.new(0, 140, 0, 30)
+espDropdownBtn.Position = UDim2.new(0, 0, 0, 5)
+espDropdownBtn.Text = "ESP"
+espDropdownBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
+espDropdownBtn.TextColor3 = Color3.new(1, 1, 1)
+espDropdownBtn.Font = Enum.Font.SourceSansBold
+espDropdownBtn.TextSize = 18
+
+local automationDropdownBtn = Instance.new("TextButton", espAutoRow)
+automationDropdownBtn.Size = UDim2.new(0, 140, 0, 30)
+automationDropdownBtn.Position = UDim2.new(0, 160, 0, 5)
+automationDropdownBtn.Text = "Automation"
+automationDropdownBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+automationDropdownBtn.TextColor3 = Color3.new(1, 1, 1)
+automationDropdownBtn.Font = Enum.Font.SourceSansBold
+automationDropdownBtn.TextSize = 18
 
 -- ESP Section
 local espContainer = Instance.new("Frame", miscTab)
-espContainer.Size = UDim2.new(1, -20, 1, -50)
-espContainer.Position = UDim2.new(0, 10, 0, 50)
+espContainer.Size = UDim2.new(1, -20, 1, -60)
+espContainer.Position = UDim2.new(0, 10, 0, 60)
 espContainer.BackgroundTransparency = 1
 espContainer.Visible = true
 
 local toggleTeleportUI = Instance.new("TextButton", espContainer)
 toggleTeleportUI.Size = UDim2.new(0, 200, 0, 40)
-toggleTeleportUI.Position = UDim2.new(0.5, -100, 0.3, -20)
+toggleTeleportUI.Position = UDim2.new(0.5, -100, 0.2, 0)
 toggleTeleportUI.Text = "Show Event Button: OFF"
 toggleTeleportUI.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
 toggleTeleportUI.TextColor3 = Color3.new(1, 1, 1)
 toggleTeleportUI.Font = Enum.Font.SourceSans
 toggleTeleportUI.TextSize = 18
 
--- 🎯 Event Button (teleport)
+-- EVENT Button (teleport)
 local teleportButton = Instance.new("TextButton", screenGui)
 teleportButton.Size = UDim2.new(0, 150, 0, 40)
 teleportButton.Position = UDim2.new(0.5, -75, 0, 60)
@@ -297,15 +302,15 @@ end)
 
 -- Automation Section
 local automationContainer = Instance.new("Frame", miscTab)
-automationContainer.Size = UDim2.new(1, -20, 1, -50)
-automationContainer.Position = UDim2.new(0, 10, 0, 50)
+automationContainer.Size = UDim2.new(1, -20, 1, -60)
+automationContainer.Position = UDim2.new(0, 10, 0, 60)
 automationContainer.BackgroundTransparency = 1
 automationContainer.Visible = false
 
 local autoBuyLabel = Instance.new("TextLabel", automationContainer)
 autoBuyLabel.Size = UDim2.new(1, -20, 0, 30)
 autoBuyLabel.Position = UDim2.new(0, 10, 0, 0)
-autoBuyLabel.Text = "Auto Buy"
+autoBuyLabel.Text = "Auto Buy Panel"
 autoBuyLabel.TextColor3 = Color3.new(1, 1, 1)
 autoBuyLabel.BackgroundTransparency = 1
 autoBuyLabel.Font = Enum.Font.SourceSansBold
@@ -313,7 +318,7 @@ autoBuyLabel.TextSize = 20
 
 local function createAutoBuySection(parent, labelName, y)
     local container = Instance.new("Frame", parent)
-    container.Size = UDim2.new(1, -20, 0, 70)
+    container.Size = UDim2.new(1, -20, 0, 50)
     container.Position = UDim2.new(0, 10, 0, y)
     container.BackgroundTransparency = 1
 
@@ -327,7 +332,7 @@ local function createAutoBuySection(parent, labelName, y)
     lbl.TextSize = 18
 
     local autoBuySelectedBtn = Instance.new("TextButton", container)
-    autoBuySelectedBtn.Size = UDim2.new(0, 100, 0, 30)
+    autoBuySelectedBtn.Size = UDim2.new(0, 120, 0, 30)
     autoBuySelectedBtn.Position = UDim2.new(0, 90, 0, 0)
     autoBuySelectedBtn.Text = "Auto Buy Selected"
     autoBuySelectedBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
@@ -336,15 +341,14 @@ local function createAutoBuySection(parent, labelName, y)
     autoBuySelectedBtn.TextSize = 16
 
     local autoBuyAllBtn = Instance.new("TextButton", container)
-    autoBuyAllBtn.Size = UDim2.new(0, 100, 0, 30)
-    autoBuyAllBtn.Position = UDim2.new(0, 90, 0, 35)
+    autoBuyAllBtn.Size = UDim2.new(0, 120, 0, 30)
+    autoBuyAllBtn.Position = UDim2.new(0, 220, 0, 0)
     autoBuyAllBtn.Text = "Auto Buy All"
     autoBuyAllBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
     autoBuyAllBtn.TextColor3 = Color3.new(1, 1, 1)
     autoBuyAllBtn.Font = Enum.Font.SourceSans
     autoBuyAllBtn.TextSize = 16
 
-    -- Placeholder functions
     autoBuySelectedBtn.MouseButton1Click:Connect(function()
         print("Auto Buy Selected " .. labelName)
         -- Insert your buy selected logic here
@@ -356,24 +360,29 @@ local function createAutoBuySection(parent, labelName, y)
 end
 
 createAutoBuySection(automationContainer, "Seeds", 40)
-createAutoBuySection(automationContainer, "Gears", 120)
-createAutoBuySection(automationContainer, "Eggs", 200)
+createAutoBuySection(automationContainer, "Gears", 100)
+createAutoBuySection(automationContainer, "Eggs", 160)
 
--- Dropdown logic
-miscDropdown.MouseButton1Click:Connect(function()
-    if currentMiscSection == dropdownOptions[1] then
-        currentMiscSection = dropdownOptions[2]
-    else
-        currentMiscSection = dropdownOptions[1]
-    end
-    miscDropdown.Text = currentMiscSection
-    espContainer.Visible = (currentMiscSection == "ESP")
-    automationContainer.Visible = (currentMiscSection == "Automation")
+espDropdownBtn.MouseButton1Click:Connect(function()
+    espContainer.Visible = true
+    automationContainer.Visible = false
+    espDropdownBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
+    automationDropdownBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+end)
+automationDropdownBtn.MouseButton1Click:Connect(function()
+    espContainer.Visible = false
+    automationContainer.Visible = true
+    automationDropdownBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
+    espDropdownBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 end)
 
--- 🐾 Pet Tab (Placeholder)
-local petTab = tabFrames["Pet"]
+espContainer.Visible = true
+automationContainer.Visible = false
+espDropdownBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
+automationDropdownBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 
+-- ========== PET TAB ==========
+local petTab = tabFrames["Pet"]
 local petLabel = Instance.new("TextLabel", petTab)
 petLabel.Size = UDim2.new(1, -20, 1, -20)
 petLabel.Position = UDim2.new(0, 10, 0, 10)

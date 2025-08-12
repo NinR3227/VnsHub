@@ -1,6 +1,7 @@
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local serverId = game.JobId ~= "" and game.JobId or "Local/Studio"
+local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/ShopList.lua"))()
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "GardenGameGUI"
@@ -353,10 +354,27 @@ local function createAutoBuySection(parent, labelName, y)
         print("Auto Buy Selected " .. labelName)
         -- Insert your buy selected logic here
     end)
+    
     autoBuyAllBtn.MouseButton1Click:Connect(function()
-        print("Auto Buy All " .. labelName)
-        -- Insert your buy all logic here
-    end)
+    print("Auto Buy All " .. labelName)
+    local list = ShopList[labelName]
+    if list then
+        for _, item in ipairs(list) do
+            buyItem(item)
+            task.wait(0.2) -- optional delay
+        end
+    else
+        warn("No list found for " .. labelName)
+    end
+end)
+
+local function buyItem(itemName)
+    local shopRemote = game:GetService("ReplicatedStorage"):FindFirstChild("ShopRemote") -- adjust if needed
+    if shopRemote then
+        shopRemote:FireServer(itemName)
+    else
+        warn("ShopRemote not found")
+    end
 end
 
 createAutoBuySection(automationContainer, "Seeds", 40)

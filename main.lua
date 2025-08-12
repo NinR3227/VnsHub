@@ -161,6 +161,11 @@ infoSection.Text = "Player: " .. player.Name ..
     "\nPlace Version: " .. tostring(game.PlaceVersion)
 
 --== SERVER HOP CONTAINER ==
+local serverHopContainer = Instance.new("Frame", mainTab)
+serverHopContainer.Size = UDim2.new(1, -20, 1, -60)
+serverHopContainer.Position = UDim2.new(0, 10, 0, 50)
+serverHopContainer.BackgroundTransparency = 1
+serverHopContainer.Visible = false
 serverHopContainer:ClearAllChildren()
 serverHopContainer.Visible = false
 

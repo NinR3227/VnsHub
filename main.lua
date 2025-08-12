@@ -125,18 +125,32 @@ playerCountLabel.TextSize = 18
 playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 
 -- Info Section
-local infoSection = Instance.new("TextLabel", displayArea)
-infoSection.Size = UDim2.new(1, -20, 1, -20)
-infoSection.Position = UDim2.new(0, 10, 0, 40)
-infoSection.TextColor3 = Color3.new(1, 1, 1)
+local infoSection = Instance.new("TextLabel")
+infoSection.Name = "InfoSection"
+infoSection.Parent = displayArea
+infoSection.Size = UDim2.new(1, 0, 1, 0)
+infoSection.Position = UDim2.new(0, 0, 0, 40)
 infoSection.BackgroundTransparency = 1
+infoSection.TextColor3 = Color3.new(1, 1, 1)
 infoSection.TextWrapped = true
 infoSection.TextYAlignment = Enum.TextYAlignment.Top
-infoSection.Font = Enum.Font.SourceSans
-infoSection.TextSize = 16
-infoSection.Text = "Player: " .. player.Name ..
+infoSection.Font = Enum.Font.Gotham
+infoSection.TextSize = 18
+
+-- Padding for inner spacing
+local padding = Instance.new("UIPadding")
+padding.Parent = infoSection
+padding.PaddingLeft = UDim.new(0, 10)
+padding.PaddingRight = UDim.new(0, 10)
+padding.PaddingTop = UDim.new(0, 10)
+padding.PaddingBottom = UDim.new(0, 10)
+
+-- Info Text
+local infoText = "Player: " .. player.Name ..
     "\nServer ID: " .. serverId ..
     "\nPlace Version: " .. tostring(game.PlaceVersion)
+
+infoSection.Text = infoText
 
 -- Server Hop Section
 local serverHopSection = Instance.new("ScrollingFrame", mainTab)

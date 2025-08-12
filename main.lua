@@ -11,8 +11,7 @@ local function fetch(url)
     return mod
 end
 
--- Set your GitHub RAW base (trailing slash required)
-local BASE = "https://raw.githubusercontent.com/YourUser/YourRepo/main/"
+local BASE = "https://raw.githubusercontent.com/NinR3227/VnsHub/main/"
 
 local Utils = fetch(BASE .. "utils.lua")
 local Gui = fetch(BASE .. "gui.lua")

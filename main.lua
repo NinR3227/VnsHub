@@ -124,33 +124,54 @@ playerCountLabel.Font = Enum.Font.SourceSansBold
 playerCountLabel.TextSize = 18
 playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 
--- Info Section
-local infoSection = Instance.new("TextLabel")
-infoSection.Name = "InfoSection"
-infoSection.Parent = displayArea
-infoSection.Size = UDim2.new(1, 0, 1, 0)
-infoSection.Position = UDim2.new(0, 0, 0, 40)
-infoSection.BackgroundTransparency = 1
-infoSection.TextColor3 = Color3.new(1, 1, 1)
-infoSection.TextWrapped = true
-infoSection.TextYAlignment = Enum.TextYAlignment.Top
-infoSection.Font = Enum.Font.Gotham
-infoSection.TextSize = 18
+-- Info Container
+local infoContainer = Instance.new("Frame")
+infoContainer.Name = "InfoContainer"
+infoContainer.Parent = displayArea
+infoContainer.Size = UDim2.new(1, -20, 0, 100)
+infoContainer.Position = UDim2.new(0, 10, 0, 50)
+infoContainer.BackgroundTransparency = 1
 
--- Padding for inner spacing
-local padding = Instance.new("UIPadding")
-padding.Parent = infoSection
-padding.PaddingLeft = UDim.new(0, 10)
-padding.PaddingRight = UDim.new(0, 10)
-padding.PaddingTop = UDim.new(0, 10)
-padding.PaddingBottom = UDim.new(0, 10)
+-- Layout for stacking info rows
+local layout = Instance.new("UIListLayout")
+layout.Parent = infoContainer
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Padding = UDim.new(0, 6)
 
--- Info Text
-local infoText = "Player: " .. player.Name ..
-    "\nServer ID: " .. serverId ..
-    "\nPlace Version: " .. tostring(game.PlaceVersion)
+-- Function to create labeled info rows
+local function createInfoRow(labelText, valueText)
+    local row = Instance.new("Frame")
+    row.Size = UDim2.new(1, 0, 0, 24)
+    row.BackgroundTransparency = 1
 
-infoSection.Text = infoText
+    local label = Instance.new("TextLabel")
+    label.Parent = row
+    label.Size = UDim2.new(0.3, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = labelText
+    label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 16
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local value = Instance.new("TextLabel")
+    value.Parent = row
+    value.Size = UDim2.new(0.7, 0, 1, 0)
+    value.Position = UDim2.new(0.3, 0, 0, 0)
+    value.BackgroundTransparency = 1
+    value.Text = valueText
+    value.TextColor3 = Color3.new(1, 1, 1)
+    value.Font = Enum.Font.Gotham
+    value.TextSize = 16
+    value.TextXAlignment = Enum.TextXAlignment.Left
+
+    row.Parent = infoContainer
+end
+
+-- Add info rows
+createInfoRow("Player:", player.Name)
+createInfoRow("Server ID:", serverId)
+createInfoRow("Place Version:", tostring(game.PlaceVersion))
 
 -- Server Hop Section
 local serverHopSection = Instance.new("ScrollingFrame", mainTab)

@@ -128,7 +128,7 @@ playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 local infoContainer = Instance.new("Frame")
 infoContainer.Name = "InfoContainer"
 infoContainer.Parent = displayArea
-infoContainer.Size = UDim2.new(1, -20, 0, 100)
+infoContainer.Size = UDim2.new(1, -20, 0, 110) -- Increased height to prevent overlap
 infoContainer.Position = UDim2.new(0, 10, 0, 50)
 infoContainer.BackgroundTransparency = 1
 
@@ -138,26 +138,32 @@ layout.Parent = infoContainer
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.Padding = UDim.new(0, 6)
 
--- Function to create labeled info rows
+-- Function to create modern info rows
 local function createInfoRow(labelText, valueText)
     local row = Instance.new("Frame")
-    row.Size = UDim2.new(1, 0, 0, 24)
-    row.BackgroundTransparency = 1
+    row.Size = UDim2.new(1, 0, 0, 28)
+    row.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    row.BackgroundTransparency = 0.1
+    row.BorderSizePixel = 0
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = row
 
     local label = Instance.new("TextLabel")
     label.Parent = row
     label.Size = UDim2.new(0.3, 0, 1, 0)
     label.BackgroundTransparency = 1
     label.Text = labelText
-    label.TextColor3 = Color3.fromRGB(200, 200, 200)
-    label.Font = Enum.Font.GothamBold
+    label.TextColor3 = Color3.fromRGB(180, 180, 180)
+    label.Font = Enum.Font.GothamMedium
     label.TextSize = 16
     label.TextXAlignment = Enum.TextXAlignment.Left
 
     local value = Instance.new("TextLabel")
     value.Parent = row
-    value.Size = UDim2.new(0.7, 0, 1, 0)
-    value.Position = UDim2.new(0.3, 0, 0, 0)
+    value.Size = UDim2.new(0.7, -10, 1, 0)
+    value.Position = UDim2.new(0.3, 10, 0, 0)
     value.BackgroundTransparency = 1
     value.Text = valueText
     value.TextColor3 = Color3.new(1, 1, 1)

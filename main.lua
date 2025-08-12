@@ -150,27 +150,53 @@ local function createInfoRow(labelText, valueText)
     corner.CornerRadius = UDim.new(0, 6)
     corner.Parent = row
 
-    if labelText == "Server ID:" then
-    local scrollFrame = Instance.new("ScrollingFrame")
-    scrollFrame.Parent = row
-    scrollFrame.Size = UDim2.new(0.7, -10, 1, 0)
-    scrollFrame.Position = UDim2.new(0.3, 10, 0, 0)
-    scrollFrame.BackgroundTransparency = 1
-    scrollFrame.ScrollBarThickness = 4
-    scrollFrame.ScrollingDirection = Enum.ScrollingDirection.X
-    scrollFrame.CanvasSize = UDim2.new(0, 300, 0, 0) -- Force scrollable width
-    scrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar
-    scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.None
+    local label = Instance.new("TextLabel")
+    label.Parent = row
+    label.Size = UDim2.new(0.3, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = labelText
+    label.TextColor3 = Color3.fromRGB(180, 180, 180)
+    label.Font = Enum.Font.GothamMedium
+    label.TextSize = 16
+    label.TextXAlignment = Enum.TextXAlignment.Left
 
-    local valueLabel = Instance.new("TextLabel")
-    valueLabel.Parent = scrollFrame
-    valueLabel.Size = UDim2.new(0, 300, 1, 0) -- Wider than frame
-    valueLabel.BackgroundTransparency = 1
-    valueLabel.Text = valueText
-    valueLabel.TextColor3 = Color3.new(1, 1, 1)
-    valueLabel.Font = Enum.Font.Gotham
-    valueLabel.TextSize = 16
-    valueLabel.TextXAlignment = Enum.TextXAlignment.Left
+    if labelText == "Server ID:" then
+        local scrollFrame = Instance.new("ScrollingFrame")
+        scrollFrame.Parent = row
+        scrollFrame.Size = UDim2.new(0.7, -10, 1, 0)
+        scrollFrame.Position = UDim2.new(0.3, 10, 0, 0)
+        scrollFrame.BackgroundTransparency = 1
+        scrollFrame.ScrollBarThickness = 4
+        scrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+        scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.None
+        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+        scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.X
+        scrollFrame.ScrollingDirection = Enum.ScrollingDirection.X
+
+        local valueLabel = Instance.new("TextLabel")
+        valueLabel.Parent = scrollFrame
+        valueLabel.Size = UDim2.new(0, 0, 1, 0)
+        valueLabel.AutomaticSize = Enum.AutomaticSize.X
+        valueLabel.BackgroundTransparency = 1
+        valueLabel.Text = valueText
+        valueLabel.TextColor3 = Color3.new(1, 1, 1)
+        valueLabel.Font = Enum.Font.Gotham
+        valueLabel.TextSize = 16
+        valueLabel.TextXAlignment = Enum.TextXAlignment.Left
+    else
+        local value = Instance.new("TextLabel")
+        value.Parent = row
+        value.Size = UDim2.new(0.7, -10, 1, 0)
+        value.Position = UDim2.new(0.3, 10, 0, 0)
+        value.BackgroundTransparency = 1
+        value.Text = valueText
+        value.TextColor3 = Color3.new(1, 1, 1)
+        value.Font = Enum.Font.Gotham
+        value.TextSize = 16
+        value.TextXAlignment = Enum.TextXAlignment.Left
+    end
+
+    row.Parent = infoContainer
 end
 
 -- Add info rows
@@ -320,4 +346,3 @@ petLabel.BackgroundTransparency = 1
 petLabel.Font = Enum.Font.SourceSansItalic
 petLabel.TextSize = 20
 petLabel.TextWrapped = true
-

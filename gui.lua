@@ -1,5 +1,5 @@
 -- gui.lua
--- Base window and menu layout for Germa66
+-- Base window + header + sidebar/content for Germa66
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -16,15 +16,13 @@ local state = {
     content = nil,
     panels = {},
     menuButtons = {},
-    minimized = false
+    minimized = false,
 }
 
 local function createHeader()
-    local t = theme
-
     local header = Instance.new("Frame")
     header.Name = "Header"
-    header.BackgroundColor3 = t.Header
+    header.BackgroundColor3 = theme.Header
     header.Size = UDim2.new(1, 0, 0, 44)
     header.Parent = state.window
 
@@ -34,11 +32,10 @@ local function createHeader()
     btnMin.AutoButtonColor = false
     btnMin.BackgroundTransparency = 1
     btnMin.Size = UDim2.new(0, 44, 1, 0)
-    btnMin.Position = UDim2.new(0, 0, 0, 0)
     btnMin.Text = "–"
     btnMin.Font = Enum.Font.GothamBold
     btnMin.TextSize = 20
-    btnMin.TextColor3 = t.Text
+    btnMin.TextColor3 = theme.Text
     btnMin.Parent = header
 
     -- Center: Title
@@ -46,7 +43,7 @@ local function createHeader()
     title.BackgroundTransparency = 1
     title.AnchorPoint = Vector2.new(0.5, 0.5)
     title.Position = UDim2.new(0.5, 0, 0.5, 0)
-    title.Size = UDim2.new(0, 220, 1, -8)
+    title.Size = UDim2.new(0, 240, 1, -8)
     title.Text = "Germa66"
     title.Font = Enum.Font.GothamBold
     title.TextSize = 18
@@ -63,7 +60,7 @@ local function createHeader()
     btnClose.Text = "×"
     btnClose.Font = Enum.Font.GothamBold
     btnClose.TextSize = 20
-    btnClose.TextColor3 = t.Text
+    btnClose.TextColor3 = theme.Text
     btnClose.Parent = header
 
     -- Interactions
@@ -80,22 +77,25 @@ local function createHeader()
 end
 
 local function createBody()
-    local t = theme
-
     local body = Instance.new("Frame")
     body.Name = "Body"
-    body.BackgroundColor3 = t.Background
+    body.BackgroundColor3 = theme.Background
     body.Size = UDim2.new(1, 0, 1, -44)
     body.Position = UDim2.new(0, 0, 0, 44)
     body.Parent = state.window
 
-    -- Sidebar (1/3)
+    -- Sidebar (1/3 from left)
+    local sidebarWrap = Instance.new("Frame")
+    sidebarWrap.BackgroundTransparency = 1
+    sidebarWrap.Size = UDim2.new(0.33, -8, 1, -8)
+    sidebarWrap.Position = UDim2.new(0, 8, 0, 4)
+    sidebarWrap.Parent = body
+
     local sidebar = Instance.new("Frame")
     sidebar.Name = "Sidebar"
-    sidebar.BackgroundColor3 = t.Sidebar
-    sidebar.Size = UDim2.new(0.33, -8, 1, -8)
-    sidebar.Position = UDim2.new(0, 8, 0, 4)
-    sidebar.Parent = body
+    sidebar.BackgroundColor3 = theme.Sidebar
+    sidebar.Size = UDim2.new(1, 0, 1, 0)
+    sidebar.Parent = sidebarWrap
     utils.roundify(sidebar, 10)
     utils.pad(sidebar, 8)
 
@@ -108,7 +108,7 @@ local function createBody()
     -- Content (2/3)
     local content = Instance.new("Frame")
     content.Name = "Content"
-    content.BackgroundColor3 = t.Panel
+    content.BackgroundColor3 = theme.Panel
     content.Size = UDim2.new(0.67, -16, 1, -8)
     content.Position = UDim2.new(0.33, 8, 0, 4)
     content.Parent = body
@@ -128,7 +128,7 @@ function Gui.init(U)
     screen.Name = "Germa66UI"
     screen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     screen.ResetOnSpawn = false
-    screen.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    screen.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
     state.screenGui = screen
 
     local window = Instance.new("Frame")
@@ -145,7 +145,6 @@ function Gui.init(U)
     createBody()
 end
 
--- Create a hidden panel in content area
 function Gui.createPanel(name)
     local panel = Instance.new("Frame")
     panel.Name = name
@@ -158,35 +157,32 @@ function Gui.createPanel(name)
     return panel
 end
 
--- Show only one panel at a time
 function Gui.showPanel(name)
-    for pname, frame in pairs(state.panels) do
-        frame.Visible = (pname == name)
+    for key, frame in pairs(state.panels) do
+        frame.Visible = (key == name)
     end
-    -- highlight corresponding menu button
     for _, info in ipairs(state.menuButtons) do
-        utils.setActiveButton(info.button, info.name == name and info.active)
+        utils.setActiveButton(info.button, info.name == name and not info.disabled)
     end
 end
 
--- Add a menu item (left sidebar)
 function Gui.addMenuItem(opts)
-    -- opts: { label, name, onClick, active = true, disabled = false }
     local label = opts.label or "Menu"
     local name = opts.name or label
+    local disabled = opts.disabled and true or false
+
     local btn = utils.createButton(state.sidebar, label, function()
-        if opts.disabled then return end
+        if disabled then return end
         if opts.onClick then opts.onClick() end
         if state.panels[name] then Gui.showPanel(name) end
         for _, info in ipairs(state.menuButtons) do
-            utils.setActiveButton(info.button, info.button == btn and not opts.disabled)
+            utils.setActiveButton(info.button, info.button == btn and not info.disabled)
         end
     end, { size = UDim2.new(1, 0, 0, 36) })
     btn.TextXAlignment = Enum.TextXAlignment.Left
-    if opts.disabled then
-        btn.TextColor3 = theme.Muted
-    end
-    table.insert(state.menuButtons, { button = btn, name = name, active = not opts.disabled })
+    if disabled then btn.TextColor3 = theme.Muted end
+
+    table.insert(state.menuButtons, { button = btn, name = name, disabled = disabled })
     return btn
 end
 

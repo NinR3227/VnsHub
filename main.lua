@@ -108,7 +108,7 @@ serverHopToggle.TextSize = 18
 
 -- Display Area
 local displayArea = Instance.new("Frame", mainTab)
-displayArea.Size = UDim2.new(1, -20, 1, -40)
+displayArea.Size = UDim2.new(1, -20, 1, -60)
 displayArea.Position = UDim2.new(0, 10, 0, 50)
 displayArea.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 displayArea.BorderSizePixel = 0
@@ -124,85 +124,19 @@ playerCountLabel.Font = Enum.Font.SourceSansBold
 playerCountLabel.TextSize = 18
 playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 
--- Info Container
-local infoContainer = Instance.new("Frame")
-infoContainer.Name = "InfoContainer"
-infoContainer.Parent = displayArea
-infoContainer.Size = UDim2.new(1, -20, 0, 110) -- Increased height to prevent overlap
-infoContainer.Position = UDim2.new(0, 10, 0, 50)
-infoContainer.BackgroundTransparency = 1
-
--- Layout for stacking info rows
-local layout = Instance.new("UIListLayout")
-layout.Parent = infoContainer
-layout.SortOrder = Enum.SortOrder.LayoutOrder
-layout.Padding = UDim.new(0, 6)
-
--- Function to create modern info rows
-local function createInfoRow(labelText, valueText)
-    local row = Instance.new("Frame")
-    row.Size = UDim2.new(1, 0, 0, 28)
-    row.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    row.BackgroundTransparency = 0.1
-    row.BorderSizePixel = 0
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
-    corner.Parent = row
-
-    local label = Instance.new("TextLabel")
-    label.Parent = row
-    label.Size = UDim2.new(0.3, 0, 1, 0)
-    label.BackgroundTransparency = 1
-    label.Text = labelText
-    label.TextColor3 = Color3.fromRGB(180, 180, 180)
-    label.Font = Enum.Font.GothamMedium
-    label.TextSize = 16
-    label.TextXAlignment = Enum.TextXAlignment.Left
-
-    if labelText == "Server ID:" then
-        local scrollFrame = Instance.new("ScrollingFrame")
-        scrollFrame.Parent = row
-        scrollFrame.Size = UDim2.new(0.7, -10, 1, 0)
-        scrollFrame.Position = UDim2.new(0.3, 10, 0, 0)
-        scrollFrame.BackgroundTransparency = 1
-        scrollFrame.ScrollBarThickness = 4
-        scrollFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.ScrollBar
-        scrollFrame.VerticalScrollBarInset = Enum.ScrollBarInset.None
-        scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-        scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.X
-        scrollFrame.ScrollingDirection = Enum.ScrollingDirection.X
-
-        local valueLabel = Instance.new("TextLabel")
-        valueLabel.Parent = scrollFrame
-        valueLabel.Size = UDim2.new(0, 0, 1, 0)
-        valueLabel.AutomaticSize = Enum.AutomaticSize.X
-        valueLabel.BackgroundTransparency = 1
-        valueLabel.Text = valueText
-        valueLabel.TextColor3 = Color3.new(1, 1, 1)
-        valueLabel.Font = Enum.Font.Gotham
-        valueLabel.TextSize = 16
-        valueLabel.TextXAlignment = Enum.TextXAlignment.Left
-    else
-        local value = Instance.new("TextLabel")
-        value.Parent = row
-        value.Size = UDim2.new(0.7, -10, 1, 0)
-        value.Position = UDim2.new(0.3, 10, 0, 0)
-        value.BackgroundTransparency = 1
-        value.Text = valueText
-        value.TextColor3 = Color3.new(1, 1, 1)
-        value.Font = Enum.Font.Gotham
-        value.TextSize = 16
-        value.TextXAlignment = Enum.TextXAlignment.Left
-    end
-
-    row.Parent = infoContainer
-end
-
--- Add info rows
-createInfoRow("Player:", player.Name)
-createInfoRow("Server ID:", serverId)
-createInfoRow("Place Version:", tostring(game.PlaceVersion))
+-- Info Section
+local infoSection = Instance.new("TextLabel", displayArea)
+infoSection.Size = UDim2.new(1, -20, 1, -20)
+infoSection.Position = UDim2.new(0, 10, 0, 40)
+infoSection.TextColor3 = Color3.new(1, 1, 1)
+infoSection.BackgroundTransparency = 1
+infoSection.TextWrapped = true
+infoSection.TextYAlignment = Enum.TextYAlignment.Top
+infoSection.Font = Enum.Font.SourceSans
+infoSection.TextSize = 16
+infoSection.Text = "Player: " .. player.Name ..
+    "\nServer ID: " .. serverId ..
+    "\nPlace Version: " .. tostring(game.PlaceVersion)
 
 -- Server Hop Section
 local serverHopSection = Instance.new("ScrollingFrame", mainTab)

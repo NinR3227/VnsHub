@@ -159,7 +159,7 @@ serverHopSection.Size = UDim2.new(1, -20, 1, -60)
 serverHopSection.Position = UDim2.new(0, 10, 0, 50)
 serverHopSection.BackgroundTransparency = 1
 serverHopSection.Visible = false
-serverHopSection.CanvasSize = UDim2.new(0, 0, 0, 300) -- Adjust height as needed
+serverHopSection.CanvasSize = UDim2.new(0, 0, 0, 300)
 serverHopSection.ScrollBarThickness = 6
 serverHopSection.ScrollingDirection = Enum.ScrollingDirection.Y
 serverHopSection.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -243,10 +243,29 @@ hopButton.MouseButton1Click:Connect(function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, player)
 end)
 
--- 🚀 Misc Tab Content
+-- 🚀 Misc Tab Content with Dropdown
 local miscTab = tabFrames["Misc"]
 
-local toggleTeleportUI = Instance.new("TextButton", miscTab)
+local miscDropdown = Instance.new("TextButton", miscTab)
+miscDropdown.Size = UDim2.new(0, 200, 0, 30)
+miscDropdown.Position = UDim2.new(0.5, -100, 0, 10)
+miscDropdown.Text = "ESP"
+miscDropdown.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+miscDropdown.TextColor3 = Color3.new(1, 1, 1)
+miscDropdown.Font = Enum.Font.SourceSansBold
+miscDropdown.TextSize = 18
+
+local dropdownOptions = {"ESP", "Automation"}
+local currentMiscSection = "ESP"
+
+-- ESP Section
+local espContainer = Instance.new("Frame", miscTab)
+espContainer.Size = UDim2.new(1, -20, 1, -50)
+espContainer.Position = UDim2.new(0, 10, 0, 50)
+espContainer.BackgroundTransparency = 1
+espContainer.Visible = true
+
+local toggleTeleportUI = Instance.new("TextButton", espContainer)
 toggleTeleportUI.Size = UDim2.new(0, 200, 0, 40)
 toggleTeleportUI.Position = UDim2.new(0.5, -100, 0.3, -20)
 toggleTeleportUI.Text = "Show Event Button: OFF"
@@ -255,7 +274,7 @@ toggleTeleportUI.TextColor3 = Color3.new(1, 1, 1)
 toggleTeleportUI.Font = Enum.Font.SourceSans
 toggleTeleportUI.TextSize = 18
 
--- 🎯 Event Button
+-- 🎯 Event Button (teleport)
 local teleportButton = Instance.new("TextButton", screenGui)
 teleportButton.Size = UDim2.new(0, 150, 0, 40)
 teleportButton.Position = UDim2.new(0.5, -75, 0, 60)
@@ -283,6 +302,82 @@ toggleTeleportUI.MouseButton1Click:Connect(function()
         toggleTeleportUI.Text = "Show Event Button: OFF"
         toggleTeleportUI.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
     end
+end)
+
+-- Automation Section
+local automationContainer = Instance.new("Frame", miscTab)
+automationContainer.Size = UDim2.new(1, -20, 1, -50)
+automationContainer.Position = UDim2.new(0, 10, 0, 50)
+automationContainer.BackgroundTransparency = 1
+automationContainer.Visible = false
+
+local autoBuyLabel = Instance.new("TextLabel", automationContainer)
+autoBuyLabel.Size = UDim2.new(1, -20, 0, 30)
+autoBuyLabel.Position = UDim2.new(0, 10, 0, 0)
+autoBuyLabel.Text = "Auto Buy"
+autoBuyLabel.TextColor3 = Color3.new(1, 1, 1)
+autoBuyLabel.BackgroundTransparency = 1
+autoBuyLabel.Font = Enum.Font.SourceSansBold
+autoBuyLabel.TextSize = 20
+
+local function createAutoBuySection(parent, labelName, y)
+    local container = Instance.new("Frame", parent)
+    container.Size = UDim2.new(1, -20, 0, 70)
+    container.Position = UDim2.new(0, 10, 0, y)
+    container.BackgroundTransparency = 1
+
+    local lbl = Instance.new("TextLabel", container)
+    lbl.Size = UDim2.new(0, 80, 0, 30)
+    lbl.Position = UDim2.new(0, 0, 0, 0)
+    lbl.Text = labelName
+    lbl.TextColor3 = Color3.new(1, 1, 1)
+    lbl.BackgroundTransparency = 1
+    lbl.Font = Enum.Font.SourceSansBold
+    lbl.TextSize = 18
+
+    local autoBuySelectedBtn = Instance.new("TextButton", container)
+    autoBuySelectedBtn.Size = UDim2.new(0, 100, 0, 30)
+    autoBuySelectedBtn.Position = UDim2.new(0, 90, 0, 0)
+    autoBuySelectedBtn.Text = "Auto Buy Selected"
+    autoBuySelectedBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+    autoBuySelectedBtn.TextColor3 = Color3.new(1, 1, 1)
+    autoBuySelectedBtn.Font = Enum.Font.SourceSans
+    autoBuySelectedBtn.TextSize = 16
+
+    local autoBuyAllBtn = Instance.new("TextButton", container)
+    autoBuyAllBtn.Size = UDim2.new(0, 100, 0, 30)
+    autoBuyAllBtn.Position = UDim2.new(0, 90, 0, 35)
+    autoBuyAllBtn.Text = "Auto Buy All"
+    autoBuyAllBtn.BackgroundColor3 = Color3.fromRGB(120, 120, 0)
+    autoBuyAllBtn.TextColor3 = Color3.new(1, 1, 1)
+    autoBuyAllBtn.Font = Enum.Font.SourceSans
+    autoBuyAllBtn.TextSize = 16
+
+    -- Placeholder functions
+    autoBuySelectedBtn.MouseButton1Click:Connect(function()
+        print("Auto Buy Selected " .. labelName)
+        -- Insert your buy selected logic here
+    end)
+    autoBuyAllBtn.MouseButton1Click:Connect(function()
+        print("Auto Buy All " .. labelName)
+        -- Insert your buy all logic here
+    end)
+end
+
+createAutoBuySection(automationContainer, "Seeds", 40)
+createAutoBuySection(automationContainer, "Gears", 120)
+createAutoBuySection(automationContainer, "Eggs", 200)
+
+-- Dropdown logic
+miscDropdown.MouseButton1Click:Connect(function()
+    if currentMiscSection == dropdownOptions[1] then
+        currentMiscSection = dropdownOptions[2]
+    else
+        currentMiscSection = dropdownOptions[1]
+    end
+    miscDropdown.Text = currentMiscSection
+    espContainer.Visible = (currentMiscSection == "ESP")
+    automationContainer.Visible = (currentMiscSection == "Automation")
 end)
 
 -- 🐾 Pet Tab (Placeholder)

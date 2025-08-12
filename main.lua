@@ -12,7 +12,7 @@ local function fetch(url)
 end
 
 -- Replace with your repo RAW base (must end with /)
-local BASE = "https://raw.githubusercontent.com/YourUser/YourRepo/main/"
+local BASE = "https://raw.githubusercontent.com/NinR3227/VnsHub/main/"
 
 local Utils = fetch(BASE .. "utils.lua")
 local Gui = fetch(BASE .. "gui.lua")

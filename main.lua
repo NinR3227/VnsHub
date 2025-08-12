@@ -3,8 +3,9 @@ local character = player.Character or player.CharacterAdded:Wait()
 local serverId = game.JobId ~= "" and game.JobId or "Local/Studio"
 
 -- Create GUI
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "GardenGameGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
 screenGui.ResetOnSpawn = false
 
 -- Main Frame
@@ -12,7 +13,6 @@ local mainFrame = Instance.new("Frame", screenGui)
 mainFrame.Size = UDim2.new(0, 500, 0, 300)
 mainFrame.Position = UDim2.new(0.5, -250, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-mainFrame.Visible = true
 
 -- Minimize Button
 local minimizeButton = Instance.new("TextButton", mainFrame)
@@ -119,16 +119,14 @@ serverHopContainer.Position = UDim2.new(0, 10, 0, 50)
 serverHopContainer.BackgroundTransparency = 1
 serverHopContainer.Visible = false
 
--- Display Area
+-- Info Section
 local displayArea = Instance.new("Frame", infoContainer)
 displayArea.Size = UDim2.new(1, -20, 1, -60)
 displayArea.Position = UDim2.new(0, 10, 0, 50)
 displayArea.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 displayArea.BorderSizePixel = 0
 
--- Player Count Label
-local playerCountLabel = Instance.new("TextLabel")
-playerCountLabel.Parent = displayArea
+local playerCountLabel = Instance.new("TextLabel", displayArea)
 playerCountLabel.Size = UDim2.new(0, 200, 0, 30)
 playerCountLabel.Position = UDim2.new(1, -210, 0, 10)
 playerCountLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -138,9 +136,7 @@ playerCountLabel.Font = Enum.Font.SourceSansBold
 playerCountLabel.TextSize = 18
 playerCountLabel.Text = "Players: " .. #game.Players:GetPlayers()
 
--- Info Section
-local infoSection = Instance.new("TextLabel")
-infoSection.Parent = displayArea
+local infoSection = Instance.new("TextLabel", displayArea)
 infoSection.Size = UDim2.new(1, -20, 1, -20)
 infoSection.Position = UDim2.new(0, 10, 0, 40)
 infoSection.TextColor3 = Color3.new(1, 1, 1)
@@ -153,12 +149,12 @@ infoSection.Text = "Player: " .. player.Name ..
     "\nServer ID: " .. serverId ..
     "\nPlace Version: " .. tostring(game.PlaceVersion)
 
--- Server Hop Section
+-- Server Hop Section (Visible = true by default!)
 local serverHopSection = Instance.new("ScrollingFrame", serverHopContainer)
 serverHopSection.Size = UDim2.new(1, -20, 1, -60)
 serverHopSection.Position = UDim2.new(0, 10, 0, 50)
 serverHopSection.BackgroundTransparency = 1
-serverHopSection.Visible = false
+serverHopSection.Visible = true
 serverHopSection.CanvasSize = UDim2.new(0, 0, 0, 300)
 serverHopSection.ScrollBarThickness = 6
 serverHopSection.ScrollingDirection = Enum.ScrollingDirection.Y
@@ -166,8 +162,7 @@ serverHopSection.AutomaticCanvasSize = Enum.AutomaticSize.Y
 serverHopSection.CanvasPosition = Vector2.new(0, 0)
 serverHopSection.ClipsDescendants = true
 
-local versionLabel = Instance.new("TextLabel")
-versionLabel.Parent = serverHopSection
+local versionLabel = Instance.new("TextLabel", serverHopSection)
 versionLabel.Size = UDim2.new(1, 0, 0, 30)
 versionLabel.Position = UDim2.new(0, 0, 0, 0)
 versionLabel.Text = "Place Version: " .. tostring(game.PlaceVersion)
@@ -176,8 +171,7 @@ versionLabel.BackgroundTransparency = 1
 versionLabel.Font = Enum.Font.SourceSansBold
 versionLabel.TextSize = 18
 
-local jobIdBox = Instance.new("TextBox")
-jobIdBox.Parent = serverHopSection
+local jobIdBox = Instance.new("TextBox", serverHopSection)
 jobIdBox.Size = UDim2.new(1, -20, 0, 30)
 jobIdBox.Position = UDim2.new(0, 10, 0, 40)
 jobIdBox.PlaceholderText = "Enter JobId / ServerId"
@@ -186,8 +180,7 @@ jobIdBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 jobIdBox.Font = Enum.Font.SourceSans
 jobIdBox.TextSize = 16
 
-local joinJobButton = Instance.new("TextButton")
-joinJobButton.Parent = serverHopSection
+local joinJobButton = Instance.new("TextButton", serverHopSection)
 joinJobButton.Size = UDim2.new(1, -20, 0, 30)
 joinJobButton.Position = UDim2.new(0, 10, 0, 80)
 joinJobButton.Text = "Join JobId Server"
@@ -196,8 +189,7 @@ joinJobButton.TextColor3 = Color3.new(1, 1, 1)
 joinJobButton.Font = Enum.Font.GothamBold
 joinJobButton.TextSize = 16
 
-local rejoinButton = Instance.new("TextButton")
-rejoinButton.Parent = serverHopSection
+local rejoinButton = Instance.new("TextButton", serverHopSection)
 rejoinButton.Size = UDim2.new(1, -20, 0, 30)
 rejoinButton.Position = UDim2.new(0, 10, 0, 120)
 rejoinButton.Text = "Rejoin Current Server"
@@ -206,8 +198,7 @@ rejoinButton.TextColor3 = Color3.new(1, 1, 1)
 rejoinButton.Font = Enum.Font.GothamBold
 rejoinButton.TextSize = 16
 
-local hopButton = Instance.new("TextButton")
-hopButton.Parent = serverHopSection
+local hopButton = Instance.new("TextButton", serverHopSection)
 hopButton.Size = UDim2.new(1, -20, 0, 30)
 hopButton.Position = UDim2.new(0, 10, 0, 160)
 hopButton.Text = "Server Hop"

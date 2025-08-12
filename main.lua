@@ -160,7 +160,7 @@ versionLabel.BackgroundTransparency = 1
 versionLabel.Font = Enum.Font.SourceSansBold
 versionLabel.TextSize = 18
 
-local jobIdBox = Instance.new("TextBox", serverHopSection)
+local jobIdBox = Instance.new("Enter JobId", serverHopSection)
 jobIdBox.Size = UDim2.new(1, -20, 0, 30)
 jobIdBox.Position = UDim2.new(0, 10, 0, 40)
 jobIdBox.PlaceholderText = "Enter JobId / ServerId"

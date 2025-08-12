@@ -108,7 +108,7 @@ serverHopToggle.TextSize = 18
 
 -- Display Area
 local displayArea = Instance.new("Frame", mainTab)
-displayArea.Size = UDim2.new(1, -20, 1, -60)
+displayArea.Size = UDim2.new(1, -20, 1, -40)
 displayArea.Position = UDim2.new(0, 10, 0, 50)
 displayArea.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 displayArea.BorderSizePixel = 0

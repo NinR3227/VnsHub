@@ -1,7 +1,7 @@
 -- gui.lua
 -- 🖼️ Simple GUI with Close Button
 
-local GUI = Instance.new("GUI")
+local GUI = Instance.new("ScreenGui")
 GUI.Name = "AutoBuyGUI"
 GUI.ResetOnSpawn = false
 GUI.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")

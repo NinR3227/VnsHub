@@ -1,7 +1,7 @@
 -- gui.lua
 -- 🖼️ Simple GUI with Close Button
 
-local GUI = Instance.new("ScreenGui")
+local GUI = Instance.new("GUI")
 GUI.Name = "AutoBuyGUI"
 GUI.ResetOnSpawn = false
 GUI.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
@@ -11,7 +11,7 @@ Frame.Size = UDim2.new(0, 300, 0, 150)
 Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
 Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 Frame.BorderSizePixel = 0
-Frame.Parent = ScreenGui
+Frame.Parent = GUI
 
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 40)

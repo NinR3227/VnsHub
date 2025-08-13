@@ -7,8 +7,8 @@ return {
     },
     Gears = {
         "Watering Can", "Trading Ticket", "Trowel", "Recall Wrench", "Basic Sprinkler", "Advanced Sprinkler", "Medium Toy",
-        "Medium Treat", "Godly Sprinkler", "Magnifying Glas", "Master Sprinkler", "Cleaning Spray", "Favorite Tool",
-        "Harvest Tool", "Friendship Pot", "Grandmaster Sprinkle", "Levelup Lollipop"
+        "Medium Treat", "Godly Sprinkler", "Magnifying Glass", "Master Sprinkler", "Cleaning Spray", "Favorite Tool",
+        "Harvest Tool", "Friendship Pot", "Grandmaster Sprinkler", "Levelup Lollipop"
     },
     Eggs = {
         "Common", "Common Summer", "Rare Summer", "Mythical", "Paradise", "Bug"

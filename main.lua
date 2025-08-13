@@ -77,16 +77,19 @@ end
 -- Fire wrapper
 local function fire(remote, itemName)
     if not remote then return false, "nil remote" end
+
     if remote:IsA("RemoteEvent") then
         local ok, err = pcall(function()
             remote:FireServer(itemName)
         end)
         return ok, err
+
     elseif remote:IsA("RemoteFunction") then
         local ok, res = pcall(function()
             return remote:InvokeServer(itemName)
         end)
         return ok, res
+
     else
         return false, "Unsupported remote type: " .. remote.ClassName
     end

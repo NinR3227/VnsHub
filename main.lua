@@ -1,3 +1,4 @@
+local GUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/gui.lua"))()
 local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/shoplist.lua"))()
 
 local ShopRemotes = {

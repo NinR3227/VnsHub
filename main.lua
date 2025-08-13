@@ -5,7 +5,7 @@ local BUY_COUNT = 25 -- Number of Times to buy each seed
 
 for _, seed in ipairs(ShopList.Seeds) do
 	for i = 1, BUY_COUNT do
-		BuySeedStock:FireSer(seed)
+		BuySeedStock:FireServer(seed)
 		wait(0.1)
 	end
 end

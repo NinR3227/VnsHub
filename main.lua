@@ -10,4 +10,4 @@ for _, seed in ipairs(ShopList.Seeds) do
 	end
 end
 
-print ("[Bought All Seeds x" ..BUY_COUNT .. "]")
+print ("[Bought All Seeds x" .. BUY_COUNT .. "]")

@@ -1,17 +1,27 @@
 -- gui.lua
+-- ⚡ Auto-Buy Controller GUI (Seeds + Gears)
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
+local pg = player:WaitForChild("PlayerGui")
 
 -- Destroy existing GUI if reloaded
-local oldGui = player:WaitForChild("PlayerGui"):FindFirstChild("AutoBuyGui")
+local oldGui = pg:FindFirstChild("AutoBuyGui")
 if oldGui then oldGui:Destroy() end
 
+-- Ensure global toggles exist
+_G.AutoBuyToggles = _G.AutoBuyToggles or { Seeds = false, Gears = false }
+
+-- Root
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AutoBuyGui"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = pg
 
+-- Frame
 local frame = Instance.new("Frame")
+frame.Name = "Root"
 frame.Size = UDim2.new(0, 300, 0, 180)
 frame.Position = UDim2.new(0.5, -150, 0.5, -90)
 frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
@@ -22,6 +32,7 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 8)
 corner.Parent = frame
 
+-- Title
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 0, 30)
 title.Position = UDim2.new(0, 10, 0, 0)
@@ -33,6 +44,7 @@ title.Font = Enum.Font.SourceSansBold
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
+-- Close
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 60, 0, 30)
 closeButton.Position = UDim2.new(1, -65, 0, 5)
@@ -41,6 +53,7 @@ closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 closeButton.TextColor3 = Color3.new(1, 1, 1)
 closeButton.Font = Enum.Font.SourceSansBold
 closeButton.TextSize = 14
+closeButton.AutoButtonColor = true
 closeButton.Parent = frame
 
 local btnCorner = Instance.new("UICorner")
@@ -51,33 +64,6 @@ closeButton.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- Utility to create toggle buttons
-local function createToggleButton(text, yPos, callback)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, 260, 0, 40)
-    button.Position = UDim2.new(0, 20, 0, yPos)
-    button.Text = text .. ": OFF"
-    button.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.SourceSansBold
-    button.TextSize = 16
-    button.Parent = frame
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
-    corner.Parent = button
-
-    local isActive = false
-    button.MouseButton1Click:Connect(function()
-        isActive = not isActive
-        button.Text = text .. (isActive and ": ON" or ": OFF")
-        button.BackgroundColor3 = isActive and Color3.fromRGB(50, 200, 50) or Color3.fromRGB(90, 90, 90)
-        callback(isActive)
-    end)
-end
-
--- Create two toggles and pass the state to main.lua via _G
-_G.AutoBuyToggles = _G.AutoBuyToggles or {Seeds = false, Gears = false}
-
-createToggleButton("Seeds", 50, function(state)
-    _G.AutoBuy
+-- Toggle factory
+local function createToggleButton(labelText, key, yPos)
+    local button = Instance.new("

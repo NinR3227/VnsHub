@@ -1,25 +1,32 @@
-local GUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/gui.lua"))()
-local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/shoplist.lua"))()
+-- ⚡️ Ultra-Fast Auto-Buy: Seeds + Gears, Fully Parallel
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local GameEvents = ReplicatedStorage:WaitForChild("GameEvents")
 
 local ShopRemotes = {
-	Seeds = game:GetService("ReplicatedStorage").GameEvents:WaitForChild("BuySeedStock"),
-	Gears = game:GetService("ReplicatedStorage").GameEvents:WaitForChild("BuyGearStock"),
-	Eggs = game:GetService("ReplicatedStorage").GameEvents:WaitForChild("BuyEggStock")
+    Seeds = GameEvents:WaitForChild("BuySeedStock"),
+    Gears = GameEvents:WaitForChild("BuyGearStock"),
 }
 
-local BUY_COUNT = 25 -- Number of Times to buy each items
+local ShopList = loadstring(game:HttpGet("https://raw.githubusercontent.com/NinR3227/VnsHub/main/shoplist.lua"))()
+local BUY_COUNT = 25
 
+-- 🚀 Spawn each category in parallel
 for category, itemList in pairs(ShopList) do
-	local remote = ShopRemote[category]
-	if remote then
-		for _, item in ipairs(itemList) do
-			for i = 1, BUY_COUNT do
-				remote:Fireserver(item)
-				wait(0.001)
-			end
-		end
-		print("[Bought All " .. category .. "]")
-	else
-		warn("[No RemoteEvent found for category: " .. category .. "]")
-	end
+    local remote = ShopRemotes[category]
+    if remote and remote:IsA("RemoteEvent") then
+        task.spawn(function()
+            for _, itemName in ipairs(itemList) do
+                task.spawn(function()
+                    for i = 1, BUY_COUNT do
+                        remote:FireServer(itemName)
+                        task.wait() -- ⚡️ No delay, pure burst
+                    end
+                end)
+            end
+            print("[✅ Buying " .. category .. " in parallel...]")
+        end)
+    else
+        warn("[⚠️ No valid RemoteEvent for category: " .. category .. "]")
+    end
 end
